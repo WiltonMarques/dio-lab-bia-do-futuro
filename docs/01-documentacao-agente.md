@@ -46,36 +46,33 @@
 ### Diagrama
 
 ```mermaid
-flowchart TD
-    A[Cliente] -->|Mensagem| B[Interface]
-    B --> C[LLM]
-    C --> D[Base de Conhecimento]
-    D --> C
-    C --> E[Validação]
-    E --> F[Resposta]
+(Fluxo Lógico de Execução)
+Input do Usuário ➔ Orquestrador (LangChain) ➔ Busca de Contexto (Arquivos CSV/JSON) ➔ Validação de Guardrails (System Prompt) ➔ Processamento LLM (Baixa Temperatura) ➔ Output Seguro e Personalizado
 ```
 
 ### Componentes
 
-| Componente | Descrição |
-|------------|-----------|
-| Interface | [ex: Chatbot em Streamlit] |
-| LLM | [ex: GPT-4 via API] |
-| Base de Conhecimento | [ex: JSON/CSV com dados do cliente] |
-| Validação | [ex: Checagem de alucinações] |
-
+| Componente               | Descrição                                                                                                         |
+    Interface	            Streamlit / Gradio (Frontend permitindo interação fluida em formato de chat).
+    Modelo Cognitivo	    Integração via API com LLMs avançados (ex: GPT-4, Claude) ou Llama via Ollama (execução local).
+    Base de Conhecimento	Arquivos locais (transacoes.csv, historico_atendimento.csv, perfil_investidor.json, produtos_financeiros.json).
+    Orquestração	        LangChain para arquitetura RAG (Retrieval-Augmented Generation).
+    Validação            	Restrições rigorosas de prompting e controle de temperatura (baixa) para checagem anti-alucinação.
 ---
 
 ## Segurança e Anti-Alucinação
 
 ### Estratégias Adotadas
 
-- [ ] [ex: Agente só responde com base nos dados fornecidos]
-- [ ] [ex: Respostas incluem fonte da informação]
-- [ ] [ex: Quando não sabe, admite e redireciona]
-- [ ] [ex: Não faz recomendações de investimento sem perfil do cliente]
+- [ ] [Ancoragem Estrita: O agente está programado para basear suas respostas e recomendações única e exclusivamente no catálogo contido em produtos_financeiros.json.]
+- [ ] [Controle Paramétrico: Utilização de temperatura baixa no LLM para garantir respostas determinísticas e mitigar qualquer risco de alucinação na precificação ou criação de taxas.]
+- [ ] [Mitigação de Riscos (Borda): Tratamento programado de cenários extremos (ex: cliente solicitando dicas de ativos de alto risco não cobertos), com o agente redirecionando o fluxo e reafirmando as diretrizes de suitability institucionais.]
+- [ ] [Rastreabilidade: Extração prévia de informações dos arquivos da base de conhecimento antes de formular qualquer hipótese financeira.]
 
 ### Limitações Declaradas
 > O que o agente NÃO faz?
 
-[Liste aqui as limitações explícitas do agente]
+[NUNCA promete ou garante rentabilidade futura em produtos de renda variável.]
+[NUNCA inventa, precifica de forma autônoma ou recomenda produtos que não estejam formalmente listados na base de conhecimento JSON.]
+[NÃO fornece dicas de investimentos especulativos fora da política da instituição (como criptomoedas de alto risco).]
+[NÃO realiza recomendações sem antes analisar e validar as métricas de tolerância a risco e os horizontes de metas presentes no perfil_investidor.json.]
